@@ -50,7 +50,7 @@ const Register = () => {
     console.log("회원 정보 전달 완료");
 
     await axios
-      .post("/auth", postData)
+      .post("http://localhost:5000/auth/register", postData)
       .then(function (response) {
         console.log(response, "성공");
         navigate("/login");
