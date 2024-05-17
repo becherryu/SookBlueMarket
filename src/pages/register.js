@@ -44,29 +44,32 @@ const Register = () => {
     setChecked(event.target.checked);
   };
 
-  /*const onhandlePost = async (data) => {
+  const onhandlePost = async (data) => {
     const { email, name, password } = data;
-    const postData = { email: email + "@sookmyung.ac.kr", name, password };
+    const postData = { email, name, password };
+    console.log("회원 정보 전달 완료");
 
-    navigate.push("/login");
     await axios
-      .post("/member/join", postData)
+      .post("/auth", postData)
       .then(function (response) {
         console.log(response, "성공");
-        navigate.push("/login");
+        navigate("/login");
       })
       .catch(function (err) {
         console.log(err);
         setRegisterError("회원가입에 실패하였습니다. 다시한번 확인해 주세요.");
       });
-  };*/
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("온클릭 이벤트 실행");
     const data = new FormData(e.currentTarget);
+    const emailInput = data.get("email").trim(); //사용자 입력 공백 제거
+    const fullEmail = `${emailInput}@sookmyung.ac.kr`; // 숙명 이메일 주소
+
     const joinData = {
-      email: data.get("email") + "@sookmyung.ac.kr",
+      email: fullEmail,
       name: data.get("name"),
       password: data.get("password"),
       rePassword: data.get("rePassword"),
@@ -74,18 +77,18 @@ const Register = () => {
     const { email, password, rePassword, name } = joinData;
 
     const emailRegex = /^[\w-.]+$/; // 도메인은 @sookmyung.ac.kr로 고정
-    if (!emailRegex.test(data.get("email")))
+    if (!emailRegex.test(emailInput))
       setEmailError("올바른 이메일 형식이 아닙니다.");
     else setEmailError("");
 
     // 비밀번호 유효성 체크
     const passwordRegex =
       /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-    if (!passwordRegex.test(password))
+    if (!passwordRegex.test(password)) {
       setPasswordState(
         "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!"
       );
-    else setPasswordState("");
+    } else setPasswordState("");
 
     // 비밀번호 같은지 체크
     if (password !== rePassword)
@@ -101,19 +104,26 @@ const Register = () => {
     // 회원가입 동의 체크
     if (!checked) alert("회원가입 약관에 동의해주세요.");
 
+    console.log("Email valid:", emailRegex.test(emailInput));
+    console.log("Password valid:", passwordRegex.test(password));
+    console.log("Passwords match:", password === rePassword);
+    console.log("Name valid:", nameRegex.test(name));
+    console.log("Terms agreed:", checked);
+    // 다 적었는지 확인
     if (
-      emailRegex.test(email) &&
+      emailRegex.test(emailInput) &&
       passwordRegex.test(password) &&
       password === rePassword &&
       nameRegex.test(name) &&
       checked
     ) {
-      //onhandlePost(joinData); 서버 연결시 가능
-      navigate("/first"); //폼제출시 바로 로그인 페이지 연결 (테스트용))
+      onhandlePost(joinData);
       console.log("홈 페이지로 이동합니다.");
+      console.log(joinData);
+    } else {
+      console.log("One or more conditions failed.");
     }
-    navigate("/first"); //폼제출시 바로 로그인 페이지 연결 (테스트용))
-    console.log("로그인 페이지로 이동합니다.");
+    console.log("온클릭 이벤트 실행!!");
   };
 
   return (

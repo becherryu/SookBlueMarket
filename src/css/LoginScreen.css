@@ -22,7 +22,8 @@
   margin-bottom: 2em;
 }
 .logo-container img {
-  /* Add your logo styling here */
+  height: 250px;
+  weight: 250px;
 }
 .logo-container p {
   color: #ffffff;

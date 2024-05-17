@@ -22,7 +22,7 @@ const First = () => {
       </header>
       <main className="main-content">
         <div className="logo-container">
-          <img src="path-to-your-logo.png" alt="FireFit Logo" />
+          <img src="logo.png" alt="Logo" />
           <p>물결처럼 흐르는 파란 장터</p>
         </div>
         <div className="form-container">
